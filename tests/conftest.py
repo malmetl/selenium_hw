@@ -2,13 +2,19 @@ import pytest
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.firefox.options import Options as FFOptions
+
+
 def pytest_addoption(parser):
     parser.addoption(
-        "--browser", default="ch", choices=["ch", "ya", "ff"]
+        "--browser", default="ch", choices=["ch", "eg", "ff"]
     )
     parser.addoption(
         "--headless", action="store_true", default=False
     )
+    parser.addoption(
+        "--opencart_url", action="store", default="http://192.168.17.119:8081/", help="Base URL for OpenCart"
+    )
+
 
 @pytest.fixture
 def browser(request):
@@ -39,3 +45,8 @@ def browser(request):
     yield driver
 
     driver.quit()
+
+
+@pytest.fixture
+def base_url(request):
+    return request.config.getoption("--opencart_url")
