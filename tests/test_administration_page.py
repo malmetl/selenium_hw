@@ -47,3 +47,12 @@ def test_bad_login(browser, base_url):
     time.sleep(2)
     assert "No match for Username and/or Password." in browser.find_element(By.CSS_SELECTOR, "#alert > div").text
 
+
+def test_admin_panel_categ(browser, base_url):
+    browser.get(base_url + "administration/")
+    browser.find_element(*LoginAdminPage.USERNAME_INPUT).send_keys("User")
+    browser.find_element(*LoginAdminPage.PASSWORD_INPUT).send_keys("bitnami")
+    browser.find_element(*LoginAdminPage.SUBMIT_BUTTON).click()
+    time.sleep(1)
+    browser.find_elements(By.LINK_TEXT, "Opencart")
+    time.sleep(2)
