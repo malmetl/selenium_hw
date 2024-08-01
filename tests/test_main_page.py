@@ -1,6 +1,7 @@
 from selenium.webdriver.common.by import By
 import time
 
+
 def test_find_logo_id(browser, base_url):
     browser.get(base_url)
     time.sleep(2)
@@ -32,4 +33,17 @@ def test_find_button(browser, base_url):
     time.sleep(2)
     cart_buttons = browser.find_elements(By.CSS_SELECTOR, "#navbar-menu > ul > li:first-child > a")
     assert cart_buttons is not None
+
+
+def test_change_money(browser, base_url):
+    browser.get(base_url)
+    browser.find_element(By.CLASS_NAME, "dropdown-toggle").click()
+    time.sleep(2)
+    browser.find_element(By.CSS_SELECTOR, "#form-currency > div > ul > li:nth-child(2) > a").click()
+    time.sleep(2)
+    browser.find_elements(By.CLASS_NAME, "product-thumb")[0].click()
+    time.sleep(2)
+    assert "£368.73" in browser.find_element(By.TAG_NAME, "h2").text
+
+
 

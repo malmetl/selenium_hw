@@ -60,3 +60,13 @@ def test_main_page_change_aler(browser, base_url):
     btn_love.click()
     time.sleep(2)
 
+
+def test_change_money_in_catalog(browser, base_url):
+    browser.get(base_url + "en-gb/catalog/smartphone")
+    browser.find_element(By.CLASS_NAME, "dropdown-toggle").click()
+    time.sleep(2)
+    browser.find_element(By.CSS_SELECTOR, "#form-currency > div > ul > li:nth-child(2) > a").click()
+    time.sleep(2)
+    browser.find_elements(By.CLASS_NAME, "product-thumb")[0].click()
+    time.sleep(2)
+    assert "£74.73" in browser.find_element(By.TAG_NAME, "h2").text
