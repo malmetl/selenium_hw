@@ -11,3 +11,6 @@ class BasePage:
     def go_to_macbook_page(self,base_url):
         self.browser.get(base_url + "en-gb/product/macbook")
 
+    def go_to_reg_page(self,base_url):
+        self.browser.get(base_url + "/index.php?route=account/register")
+

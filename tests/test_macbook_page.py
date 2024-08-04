@@ -43,6 +43,7 @@ def test_button_carts(browser, base_url):
     Cart(browser).check_cart()
     time.sleep(3)
     succ_full = browser.find_element(By.CLASS_NAME, "text-start")
+    print(succ_full.text)
     assert "MacBook" in succ_full.text
 
 
