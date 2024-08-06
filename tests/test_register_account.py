@@ -17,7 +17,7 @@ def test_register(browser, base_url):
 def test_succesfull_register(browser, base_url):
     BasePage(browser).go_to_reg_page(base_url)
     time.sleep(1)
-    registrationAccount(browser).registerUser("Maximilioano","Rengager","asdsdsdad@mail.ru","testpass")
+    registrationAccount(browser).registerUser("Maximilioano", "Rengager", "asdsdsdad@mail.ru", "testpass")
     time.sleep(2)
     assert "Your Account Has Been Created!" in browser.find_element(By.ID, "content").text
     time.sleep(3)
@@ -45,6 +45,7 @@ def test_full_registration(browser, base_url):
     continue_link.click()
     my_account_header = WebDriverWait(browser, 10).until(EC.presence_of_element_located((By.TAG_NAME, "h2")))
     assert "My Account" in my_account_header.text
+
 
 def test_easy_check_reg(browser, base_url):
     BasePage(browser).go_to_reg_page(base_url)
