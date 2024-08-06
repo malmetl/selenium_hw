@@ -2,7 +2,7 @@ import pytest
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.firefox.options import Options as FFOptions
-import time
+
 
 def pytest_addoption(parser):
     parser.addoption(
@@ -12,7 +12,7 @@ def pytest_addoption(parser):
         "--headless", action="store_true", default=False
     )
     parser.addoption(
-        "--opencart_url", action="store", default="http://192.168.0.11:8081/", help="Base URL for OpenCart"
+        "--opencart_url", action="store", default="http://192.168.17.119:8081/", help="Base URL for OpenCart"
     )
 
 
