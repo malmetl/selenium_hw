@@ -2,6 +2,9 @@ import pytest
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.firefox.options import Options as FFOptions
+import allure
+import logging
+import json
 
 
 def pytest_addoption(parser):
@@ -19,8 +22,8 @@ def pytest_addoption(parser):
 @pytest.fixture
 def browser(request):
     browser_name = request.config.getoption("--browser")
-
     headless = request.config.getoption("--headless")
+
     driver = None
 
     if browser_name == "ch":
@@ -42,8 +45,17 @@ def browser(request):
         driver = webdriver.Chrome(options=options)
 
     driver.set_window_size(1920, 1080)
-    yield driver
 
+    allure.attach(
+        name=driver.session_id,
+        body=json.dumps(driver.capabilities, indent=4, ensure_ascii=False),
+        attachment_type=allure.attachment_type.JSON
+    )
+
+    driver.test_name = request.node.name
+    driver.log_level = logging.DEBUG
+
+    yield driver
     driver.quit()
 
 

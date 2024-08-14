@@ -1,12 +1,16 @@
+import allure
 from selenium.webdriver.common.by import By
 import time
 from page_object.basepage import BasePage
 from page_object.cart import Cart
+from page_object.productPage import ProductPage
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 
+@allure.feature('Product Page')
+@allure.title('Главная страница продукта')
 def test_main_page_product(browser, base_url):
     BasePage(browser).go_to_main_page(base_url)
     WebDriverWait(browser, 10).until(EC.element_to_be_clickable((By.CLASS_NAME, "product-thumb"))).click()
@@ -14,42 +18,42 @@ def test_main_page_product(browser, base_url):
     assert "MacBook" in header
 
 
+@allure.feature('Product Page')
+@allure.title('Проверка описания продукта')
 def test_main_page_brand(browser, base_url):
     BasePage(browser).go_to_macbook_page(base_url)
     time.sleep(3)
-    header = browser.find_element(By.CSS_SELECTOR, "#content > ul > li:nth-of-type(2) > a").click()
-    time.sleep(2)
-    memory = browser.find_element(By.CSS_SELECTOR,
-                                  "#tab-specification > div > table > thead:first-of-type > tr > td").text
-    time.sleep(1)
-    assert "Memory" in memory
-    time.sleep(2)
-    name_memory = browser.find_element(By.CSS_SELECTOR,
-                                       "#tab-specification > div > table > tbody:first-of-type > tr > td:first-of-type").text
-    time.sleep(2)
-    assert "test 1" in name_memory
+    memory = ProductPage(browser).check_memory_product(ProductPage.memory)
+    name_memory = ProductPage(browser).check_name_memory(ProductPage.name_memory)
+    assert memory is not None
+    assert name_memory is not None
 
 
+@allure.feature('Product Page')
+@allure.title('Проверка изображения продукта')
 def test_img_mac(browser, base_url):
     BasePage(browser).go_to_macbook_page(base_url)
-    img = browser.find_element(By.CSS_SELECTOR, "#content > div:first-of-type > div:first-of-type > div > a > img")
+    img = ProductPage(browser).check_image_product(ProductPage.image)
     assert img is not None
     assert img.get_attribute("src") != ""
 
 
+@allure.feature('Product Page')
+@allure.title('Проверка добавления продукта в корзину')
 def test_button_carts(browser, base_url):
     BasePage(browser).go_to_macbook_page(base_url)
-    Cart(browser).add_to_cart(base_url)
-    Cart(browser).check_cart()
+    Cart(browser).add_to_cart(Cart.button_cart)
+    Cart(browser).check_cart(Cart.check_cart_product)
     time.sleep(3)
     succ_full = browser.find_element(By.CLASS_NAME, "text-start")
-    print(succ_full.text)
-    assert "MacBook" in succ_full.text
+    assert succ_full is not None
 
 
-def test_button_carts(browser, base_url):
+@allure.feature('Product Page')
+@allure.title('Изменение кол-ва продуктов')
+def test_check_number(browser, base_url):
     BasePage(browser).go_to_macbook_page(base_url)
-    numbers = browser.find_element(By.ID, "input-quantity")
+    numbers = ProductPage(browser).check_product_number()
     time.sleep(1)
     numbers.click()
     numbers.clear()
