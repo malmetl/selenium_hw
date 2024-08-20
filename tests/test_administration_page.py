@@ -56,14 +56,16 @@ def test_admin_panel_categ(browser, base_url):
         screenshot = browser.get_screenshot_as_png()
         allure.attach(screenshot, name="Screenshot", attachment_type=allure.attachment_type.PNG)
 
-
+@allure.feature('Admin Page')
+@allure.title('Добавление продукта')
 def test_add_product(browser, base_url):
     UserPage(browser).go_to_admin_page(base_url)
     UserPage(browser).login("User", "bitnami")
     AdminPage(browser).description_new_product()
     WebDriverWait(browser, 10).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="content"]/div[1]/div/div/button')))
 
-
+@allure.feature('Admin Page')
+@allure.title('Удаление продукта')
 def test_delete_product(browser, base_url):
     UserPage(browser).go_to_admin_page(base_url)
     UserPage(browser).login("User", "bitnami")
