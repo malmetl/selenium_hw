@@ -1,0 +1,30 @@
+{
+    "acceptInsecureCerts": true,
+    "browserName": "chrome",
+    "browserVersion": "130.0.6723.70",
+    "chrome": {
+        "chromedriverVersion": "130.0.6723.69 (3ec172b971b9478c515a58f591112c5c23fa4965-refs/branch-heads/6723@{#1452})",
+        "userDataDir": "C:\\Users\\KUROCH~1\\AppData\\Local\\Temp\\scoped_dir34468_2043539755"
+    },
+    "fedcm:accounts": true,
+    "goog:chromeOptions": {
+        "debuggerAddress": "localhost:58666"
+    },
+    "networkConnectionEnabled": false,
+    "pageLoadStrategy": "normal",
+    "platformName": "windows",
+    "proxy": {},
+    "setWindowRect": true,
+    "strictFileInteractability": false,
+    "timeouts": {
+        "implicit": 0,
+        "pageLoad": 300000,
+        "script": 30000
+    },
+    "unhandledPromptBehavior": "dismiss and notify",
+    "webauthn:extension:credBlob": true,
+    "webauthn:extension:largeBlob": true,
+    "webauthn:extension:minPinLength": true,
+    "webauthn:extension:prf": true,
+    "webauthn:virtualAuthenticators": true
+}
