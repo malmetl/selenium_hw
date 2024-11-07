@@ -49,10 +49,38 @@ services:
       - OPENCART_DATABASE_PORT=3306
       - OPENCART_DATABASE_USER=bn_opencart
       - OPENCART_DATABASE_NAME=bitnami_opencart
+      - SELENOID_URL=http://selenoid:4444/wd/hub
+      - BROWSER=chrome
+      - BROWSER_VERSION=latest
+      - THREADS=1
     depends_on:
       - opencart
+      - selenoid
+    volumes:
+      - ./allure-results:/app/allure-results
     entrypoint: ["pytest"]
-    command: ["--browser=chrome"]
+    command: ["--alluredir=/app/allure-results", "--url=http://opencart:8080", "--browser=chrome", "--browser_version=latest", "--threads=1", "--selenoid=http://selenoid:4444/wd/hub"]
+
+  selenoid:
+    image: "aerokube/selenoid:1.10.0"
+    ports:
+      - "4444:4444"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "./selenoid/config:/etc/selenoid"
+      - "./selenoid/video:/opt/selenoid/video"
+      - "./selenoid/logs:/opt/selenoid/logs"
+    environment:
+      - OVERRIDE_VIDEO_OUTPUT_DIR=./selenoid/video
+    command: ["-conf", "/etc/selenoid/browsers.json", "-video-output-dir", "/opt/selenoid/video"]
+
+  jenkins:
+    image: "jenkins/jenkins:latest"
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    volumes:
+      - jenkins_home:/var/jenkins_home
 
 volumes:
   mariadb_data:
@@ -60,4 +88,6 @@ volumes:
   opencart_data:
     driver: local
   opencart_storage_data:
+    driver: local
+  jenkins_home:
     driver: local

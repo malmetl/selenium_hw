@@ -1,25 +1,28 @@
-FROM python:3.9-slim
+FROM python:3.11-slim
 
-RUN apt-get update && \
-    apt-get install -y wget unzip curl firefox-esr && \
-    apt-get clean
+RUN apt-get update && apt-get install -y \
+    wget \
+    unzip \
+    && rm -rf /var/lib/apt/lists/*
 
-RUN wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
-    apt install -y ./google-chrome-stable_current_amd64.deb && \
-    rm google-chrome-stable_current_amd64.deb
-
-RUN wget -O /tmp/chromedriver.zip https://chromedriver.storage.googleapis.com/`curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE`/chromedriver_linux64.zip \
-    && unzip /tmp/chromedriver.zip -d /usr/local/bin/ \
-    && rm /tmp/chromedriver.zip
-
-RUN apt-get install -y xvfb
-
-WORKDIR /app
+RUN wget https://github.com/allure-framework/allure2/releases/download/2.13.8/allure-2.13.8.zip \
+    && unzip allure-2.13.8.zip -d /opt/ \
+    && rm allure-2.13.8.zip \
+    && ln -s /opt/allure-2.13.8/bin/allure /usr/bin/allure
 
 COPY . /app
+WORKDIR /app
 
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-ENTRYPOINT ["pytest"]
+ENV OPENCART_HOST=http://opencart:8080
+ENV OPENCART_DATABASE_HOST=mariadb
+ENV OPENCART_DATABASE_PORT=3306
+ENV OPENCART_DATABASE_USER=bn_opencart
+ENV OPENCART_DATABASE_NAME=bitnami_opencart
+ENV SELENOID_URL=http://selenoid:4444/wd/hub
+ENV BROWSER=chrome
+ENV BROWSER_VERSION=latest
+ENV THREADS=1
 
-CMD ["--browser=firefox"]
+CMD ["pytest", "--alluredir=/app/allure-results", "--url=http://opencart:8080", "--browser=chrome", "--browser_version=latest", "--threads=1", "--selenoid=http://selenoid:4444/wd/hub"]
